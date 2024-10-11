@@ -1,0 +1,17 @@
+galaktyka:
+    -> odleglosc od drogi mlecznej
+    -> wielkość
+    -> gwiazda główna
+    -> komety
+    -> planety
+        -> typ
+        -> średnica orbity
+        -> gatunki
+        -> roślinność
+        -> ile trwa doba
+        -> która w kolei od gwiazdy
+        -> księżyce
+            -> odległość od planety
+            -> średnica
+            -> ile zajmuje orbita
+
