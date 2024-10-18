@@ -1,27 +1,19 @@
-const port = 4000
 import express from "express";
-const app = new express();
-
-//Faker dla danych
-// 3 poziomy zgdnieżdżenia 
-// co najmniej 5 statusów i 5 podstawowych metod
+import { galaxyRouter } from "./routes/galaxyRouter.js";
+import { planetRouter } from "./routes/planetRouter.js";
+import { moonRouter } from "./routes/moonRouter.js";
+const app = express();
+const port = 4000
 
 app.use(express.json());
 
+app.use("/galaxies", galaxyRouter);
+app.use("/planets", planetRouter);
+app.use("/moons", moonRouter);
 
 app.get("/", (req, res) => {
-    res.send("Hello world!");
-});
-
-app.post();
-
-app.put();
-
-app.patch();
-
-app.delete();
-
-
+    res.send("Hello world!")
+})
 
 app.listen(port, () => {
     console.log("Server started on" , port)
