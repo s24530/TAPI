@@ -9,11 +9,13 @@ galaktyka:
         -> średnica
         -> czas orbity
         -> gatunki
+        -> nazwa_galaktyki
         -> ile trwa doba
         -> księżyce
             -> nazwa
             -> odległość od planety
             -> średnica
+            -> nazwa_planety
             -> ile zajmuje orbita
 
 Metoda moze nie miec sensu i to obsłużyć
