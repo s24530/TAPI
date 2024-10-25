@@ -11,13 +11,13 @@ function validateGalaxy(galaxy) {
     );
 }
 
-//GET all
 galaxyRouter.get("/", (req, res) => {
     res.json(data.galaxies);
 });
 
-//GET specific
 galaxyRouter.get("/:id", (req, res) => {
+    // if(typeof req.params.id !== "number")
+    //     return res.status(400).send("Please provide a number")
     const galaxy = data.galaxies.find((g) => g.id === parseInt(req.params.id));
     if (galaxy) {
         res.json(galaxy);
@@ -26,7 +26,6 @@ galaxyRouter.get("/:id", (req, res) => {
     }
 });
 
-//Create a galaxy
 galaxyRouter.post("/", (req, res) => {
     if (!Object.keys(req.body).length) {
         return res.status(400).send("No data provided");
@@ -35,6 +34,7 @@ galaxyRouter.post("/", (req, res) => {
     if (!validateGalaxy(newGalaxy)) {
         return res.status(400).send("Invalid galaxy data");
     }
+    data.galaxies.push(newGalaxy)
     res.status(201).send(newGalaxy);
 });
 
@@ -49,12 +49,15 @@ galaxyRouter.put("/:id", (req, res) => {
     if (!validateGalaxy(galaxy)) {
         return res.status(400).send("Invalid galaxy data");
     }
+    const galaxyIndex = data.galaxies.findIndex(
+        (g) => g.id === parseInt(req.params.id)
+    );
     data.galaxies[galaxyIndex] = {
         ...req.body,
         id: parseInt(req.params.id),
         planets: data.galaxies[galaxyIndex].planets,
     };
-    res.json(data.galaxies[galaxyIndex]);
+    res.status(201).json(data.galaxies[galaxyIndex]);
 });
 
 galaxyRouter.patch("/:id", (req, res) => {
@@ -82,13 +85,11 @@ galaxyRouter.patch("/:id", (req, res) => {
 });
 
 galaxyRouter.delete("/:id", (req, res) => {
-    const index = data.galaxies.findIndex(
-        (g) => g.id === parseInt(req.params.id)
-    );
-    if (index === -1) {
+    const galaxy = data.galaxies.find((g) => g.id === parseInt(req.params.id));
+    if (!galaxy) {
         return res.status(404).send("Galaxy not found");
     }
-
-    data.galaxies.splice(index, 1);
+    //202
+    data.galaxies.pop(galaxy)
     res.status(204).send("Galaxy deleted");
 });

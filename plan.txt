@@ -19,3 +19,5 @@ galaktyka:
             -> ile zajmuje orbita
 
 Metoda moze nie miec sensu i to obsłużyć
+cody
+headery 

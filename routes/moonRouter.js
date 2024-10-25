@@ -33,6 +33,7 @@ moonRouter.post("/", (req, res) => {
     if (!validateMoon(newMoon)) {
         return res.status(400).send("Invalid moon data");
     }
+    data.moons.push(newMoon)
     res.status(201).send(newMoon);
 });
 
@@ -47,8 +48,11 @@ moonRouter.put("/:id", (req, res) => {
     if (!validateMoon(moon)) {
         return res.status(400).send("Invalid moon data");
     }
+    const moonIndex = data.moons.findIndex(
+        (m) => m.id === parseInt(req.params.id)
+    );  
     data.moons[moonIndex] = { ...req.body, id: parseInt(req.params.id) };
-    res.json(data.moons[moonIndex]);
+    res.status(201).json(data.moons[moonIndex]);
 });
 
 // ... <- spread operator

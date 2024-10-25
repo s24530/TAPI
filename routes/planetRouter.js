@@ -34,6 +34,7 @@ planetRouter.post("/", (req, res) => {
     if (!validatePlanet(newPlanet)) {
         return res.status(400).send("Invalid planet data");
     }
+    data.planets.push(newPlanet)
     res.status(201).send(newPlanet);
 });
 
@@ -48,12 +49,15 @@ planetRouter.put("/:id", (req, res) => {
     if (!validatePlanet(planet)) {
         return res.status(400).send("Invalid planet data");
     }
+    const planetIndex = data.planets.findIndex(
+        (p) => p.id === parseInt(req.params.id)
+    );
     data.planets[planetIndex] = {
         ...req.body,
         id: parseInt(req.params.id),
         moons: data.planets[planetIndex].moons,
     };
-    res.json(data.planets[planetIndex]);
+    res.status(201).json(data.planets[planetIndex]);
 });
 
 planetRouter.patch("/:id", (req, res) => {
@@ -96,13 +100,11 @@ planetRouter.patch("/:id", (req, res) => {
 });
 
 planetRouter.delete("/:id", (req, res) => {
-    const index = data.galaxies.findIndex(
-        (g) => g.id === parseInt(req.params.id)
-    );
-    if (index === -1) {
+    const planet = data.planets.find((g) => g.id === parseInt(req.params.id));
+    if (!planet) {
         return res.status(404).send("Planet not found");
     }
 
-    data.planets.splice(index, 1);
-    res.status(204).send("Planet deleted");
+    data.planets.pop(planet);
+    res.status(204);
 });
