@@ -11,8 +11,38 @@ function validateGalaxy(galaxy) {
     );
 }
 
+const addHateoas = (item) => {
+    return {
+        ...item,
+        links: [
+            {
+                rel: "self",
+                method: "GET",
+                href: `localhost:4000/galaxies/${item.id}`,
+            },
+            {
+                rel: "update",
+                method: "PUT",
+                href: `localhost:4000/galaxies/${item.id}`,
+            },
+            {
+                rel: "update",
+                method: "PATCH",
+                href: `localhost:4000/galaxies/${item.id}`,
+            },
+            {
+                rel: "delete",
+                method: "DELETE",
+                href: `localhost:4000/galaxies/${item.id}`,
+            },
+            { rel: "list", method: "GET", href: `localhost:4000/galaxies` },
+        ],
+    };
+};
+
 galaxyRouter.get("/", (req, res) => {
-    res.json(data.galaxies);
+    const galaxies = data.galaxies.map(addHateoas);
+    res.json(galaxies);
 });
 
 galaxyRouter.get("/:id", (req, res) => {
@@ -20,7 +50,7 @@ galaxyRouter.get("/:id", (req, res) => {
     //     return res.status(400).send("Please provide a number")
     const galaxy = data.galaxies.find((g) => g.id === parseInt(req.params.id));
     if (galaxy) {
-        res.json(galaxy);
+        res.json(addHateoas(galaxy));
     } else {
         res.status(404).send("Galaxy not found");
     }
@@ -34,8 +64,8 @@ galaxyRouter.post("/", (req, res) => {
     if (!validateGalaxy(newGalaxy)) {
         return res.status(400).send("Invalid galaxy data");
     }
-    data.galaxies.push(newGalaxy)
-    res.status(201).send(newGalaxy);
+    data.galaxies.push(newGalaxy);
+    res.status(201).send(addHateoas(newGalaxy));
 });
 
 galaxyRouter.put("/:id", (req, res) => {
@@ -57,7 +87,7 @@ galaxyRouter.put("/:id", (req, res) => {
         id: parseInt(req.params.id),
         planets: data.galaxies[galaxyIndex].planets,
     };
-    res.status(201).json(data.galaxies[galaxyIndex]);
+    res.status(201).json(addHateoas(data.galaxies[galaxyIndex]));
 });
 
 galaxyRouter.patch("/:id", (req, res) => {
@@ -81,7 +111,7 @@ galaxyRouter.patch("/:id", (req, res) => {
         return res.status(400).send("Invalid main star");
 
     data.galaxies[galaxyIndex] = { ...galaxyToUpdate, ...req.body };
-    res.json(data.galaxies[galaxyIndex]);
+    res.json(addHateoas(data.galaxies[galaxyIndex]));
 });
 
 galaxyRouter.delete("/:id", (req, res) => {
@@ -90,6 +120,6 @@ galaxyRouter.delete("/:id", (req, res) => {
         return res.status(404).send("Galaxy not found");
     }
     //202
-    data.galaxies.pop(galaxy)
+    data.galaxies.pop(galaxy);
     res.status(204).send("Galaxy deleted");
 });

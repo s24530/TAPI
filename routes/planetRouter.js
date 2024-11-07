@@ -13,14 +13,44 @@ function validatePlanet(planet) {
     );
 }
 
+const addHateoas = (item) => {
+    return {
+        ...item,
+        links: [
+            {
+                rel: "self",
+                method: "GET",
+                href: `localhost:4000/planets/${item.id}`,
+            },
+            {
+                rel: "update",
+                method: "PUT",
+                href: `localhost:4000/planets/${item.id}`,
+            },
+            {
+                rel: "update",
+                method: "PATCH",
+                href: `localhost:4000/planets/${item.id}`,
+            },
+            {
+                rel: "delete",
+                method: "DELETE",
+                href: `localhost:4000/planets/${item.id}`,
+            },
+            { rel: "list", method: "GET", href: `localhost:4000/planets` },
+        ],
+    };
+};
+
 planetRouter.get("/", (req, res) => {
-    res.send(data.planets);
+    const planets = data.planets.map(addHateoas);
+    res.send(planets);
 });
 
 planetRouter.get("/:id", (req, res) => {
     const planet = data.planets.find((g) => g.id === parseInt(req.params.id));
     if (planet) {
-        res.json(planet);
+        res.json({ planet, url: `localhost:4000/planets/${req.params.id}` });
     } else {
         res.status(404).send("Planet not found");
     }
@@ -34,8 +64,8 @@ planetRouter.post("/", (req, res) => {
     if (!validatePlanet(newPlanet)) {
         return res.status(400).send("Invalid planet data");
     }
-    data.planets.push(newPlanet)
-    res.status(201).send(newPlanet);
+    data.planets.push(newPlanet);
+    res.status(201).send(addHateoas(newPlanet));
 });
 
 planetRouter.put("/:id", (req, res) => {
@@ -57,7 +87,7 @@ planetRouter.put("/:id", (req, res) => {
         id: parseInt(req.params.id),
         moons: data.planets[planetIndex].moons,
     };
-    res.status(201).json(data.planets[planetIndex]);
+    res.status(201).json(addHateoas(data.planets[planetIndex]));
 });
 
 planetRouter.patch("/:id", (req, res) => {
@@ -96,7 +126,7 @@ planetRouter.patch("/:id", (req, res) => {
         return res.status(400).send("Invalid galaxy");
 
     data.planets[planetIndex] = { ...planetToUpdate, ...req.body };
-    res.json(data.planets[planetIndex]);
+    res.json(addHateoas(data.planets[planetIndex]));
 });
 
 planetRouter.delete("/:id", (req, res) => {

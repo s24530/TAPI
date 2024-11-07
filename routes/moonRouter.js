@@ -12,14 +12,44 @@ function validateMoon(moon) {
     );
 }
 
+const addHateoas = (item) => {
+    return {
+        ...item,
+        links: [
+            {
+                rel: "self",
+                method: "GET",
+                href: `localhost:4000/moons/${item.id}`,
+            },
+            {
+                rel: "update",
+                method: "PUT",
+                href: `localhost:4000/moons/${item.id}`,
+            },
+            {
+                rel: "update",
+                method: "PATCH",
+                href: `localhost:4000/moons/${item.id}`,
+            },
+            {
+                rel: "delete",
+                method: "DELETE",
+                href: `localhost:4000/moons/${item.id}`,
+            },
+            { rel: "list", method: "GET", href: `localhost:4000/moons` },
+        ],
+    };
+};
+
 moonRouter.get("/", (req, res) => {
-    res.send(data.moons);
+    const moons = data.moons.map(addHateoas);
+    res.send(moons);
 });
 
 moonRouter.get("/:id", (req, res) => {
     const moon = data.moons.find((g) => g.id === parseInt(req.params.id));
     if (moon) {
-        res.json(moon);
+        res.json({ moon, url: `localhost:4000/moons/${req.params.id}` });
     } else {
         res.status(404).send("Moon not found");
     }
@@ -33,8 +63,8 @@ moonRouter.post("/", (req, res) => {
     if (!validateMoon(newMoon)) {
         return res.status(400).send("Invalid moon data");
     }
-    data.moons.push(newMoon)
-    res.status(201).send(newMoon);
+    data.moons.push(newMoon);
+    res.status(201).send(addHateoas(newMoon));
 });
 
 moonRouter.put("/:id", (req, res) => {
@@ -50,9 +80,9 @@ moonRouter.put("/:id", (req, res) => {
     }
     const moonIndex = data.moons.findIndex(
         (m) => m.id === parseInt(req.params.id)
-    );  
+    );
     data.moons[moonIndex] = { ...req.body, id: parseInt(req.params.id) };
-    res.status(201).json(data.moons[moonIndex]);
+    res.status(201).json(addHateoas(data.moons[moonIndex]));
 });
 
 // ... <- spread operator
@@ -84,7 +114,7 @@ moonRouter.patch("/:id", (req, res) => {
         return res.status(400).send("Invalid planet");
 
     data.moons[moonIndex] = { ...moonToUpdate, ...req.body };
-    res.json(data.moons[moonIndex]);
+    res.json(addHateoas(data.moons[moonIndex]));
 });
 
 moonRouter.delete("/:id", (req, res) => {
