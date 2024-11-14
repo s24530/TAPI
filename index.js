@@ -1,6 +1,6 @@
 import express from "express";
 import data from "./data.json" assert { type: "json" };
-import cors from "cors"
+import cors from "cors";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 const app = express();
@@ -98,59 +98,74 @@ const typeDefs = `#graphql
         updateMoon(id: Int, moonInput: MoonInput): Moon
         deleteMoon(id: Int): DeleteResponse
     }
-`
+`;
 
 const resolvers = {
-    Query:{
+    Query: {
         galaxies: () => data.galaxies,
         planets: () => data.planets,
         moons: () => data.moons,
-        galaxy: (_,{id}) => data.galaxies.find(g => g.id === id),
-        planet: (_,{id}) => data.planets.find(p => p.id === id),
-        moon: (_,{id}) => data.moons.find(m => m.id === id),
+        galaxy: (_, { id }) => data.galaxies.find((g) => g.id === id),
+        planet: (_, { id }) => data.planets.find((p) => p.id === id),
+        moon: (_, { id }) => data.moons.find((m) => m.id === id),
     },
 
-    Mutation:{
-        createGalaxy: (_, {galaxyInput}) => {
+    Mutation: {
+        createGalaxy: (_, { galaxyInput }) => {
             const id = data.galaxies[data.galaxies.length - 1].id + 1;
-            const newGalaxy = {id,...galaxyInput}
+            const newGalaxy = { id, ...galaxyInput };
             data.galaxies.push(newGalaxy);
             return newGalaxy;
         },
-        updateGalaxy: (_, {id, galaxyInput}) => data.galaxies,
-        deleteGalaxy: (_, {id}) => {
+        updateGalaxy: (_, { id, galaxyInput }) => {
+            data.galaxies[id] = {
+                id: id,
+                ...galaxyInput,
+            };
+        },
+        deleteGalaxy: (_, { id }) => {
             const galaxy = data.galaxies.find((g) => g.id === id);
-            data.galaxies.pop(galaxy)
-            return {success: true, message:"Deleted"}
+            data.galaxies.pop(galaxy);
+            return { success: true, message: "Deleted" };
         },
 
-        createPlanet: (_, {planetInput}) => {
+        createPlanet: (_, { planetInput }) => {
             const id = data.planet[data.planets.length - 1].id + 1;
-            const newPlanet = {id,...planetInput}
+            const newPlanet = { id, ...planetInput };
             data.planets.push(planetInput);
             return newPlanet;
         },
-        updatePlanet: (_, {id, planetInput}) => data.planets,
-        deletePlanet: (_, {id}) => {
+        updatePlanet: (_, { id, planetInput }) => {
+            data.planets[id] = {
+                id: id,
+                ...planetInput,
+            };
+        },
+        deletePlanet: (_, { id }) => {
             const planet = data.planets.find((p) => p.id === id);
-            data.planets.pop(planet)
-            return {success: true, message:"Deleted"}
+            data.planets.pop(planet);
+            return { success: true, message: "Deleted" };
         },
 
-        createMoon: (_, {moonInput}) => {
+        createMoon: (_, { moonInput }) => {
             const id = data.moons[data.moons.length - 1].id + 1;
-            const newMoon = {id,...moonInput}
+            const newMoon = { id, ...moonInput };
             data.moons.push(newMoon);
             return newMoon;
         },
-        updateMoon: (_, {id, moonInput}) => data.moons,
-        deleteMoon: (_, {id}) => {
-            const moon = data.moons.find((g) => g.id === id);
-            data.moons.pop(moon)
-            return {success: true, message:"Deleted"}
+        updateMoon: (_, { id, moonInput }) => {
+            data.moons[id] = {
+                id: id,
+                ...moonInput,
+            };
         },
-    }
-}
+        deleteMoon: (_, { id }) => {
+            const moon = data.moons.find((g) => g.id === id);
+            data.moons.pop(moon);
+            return { success: true, message: "Deleted" };
+        },
+    },
+};
 
 const apolloServer = new ApolloServer({
     typeDefs,
@@ -158,7 +173,7 @@ const apolloServer = new ApolloServer({
 });
 await apolloServer.start();
 
-app.use('/graphql', cors(), express.json(), expressMiddleware(apolloServer))
+app.use("/graphql", cors(), express.json(), expressMiddleware(apolloServer));
 app.listen(port, () => {
     console.log(`Server listening on localhost:${port}`);
 });
