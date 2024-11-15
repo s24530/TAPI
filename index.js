@@ -39,29 +39,29 @@ const typeDefs = `#graphql
     }
 
     input GalaxyInput{
-        name: String
-        distance: Float
-        size: Int
-        mainStar: String
+        name: String!
+        distance: Float!
+        size: Int!
+        mainStar: String!
         planets: [Int]!
     }
 
     input PlanetInput{
-        name: String
-        climate: String
-        diameter: Int
-        orbitalPeriod: Int
-        species: String
-        dayLength: Float
+        name: String!
+        climate: String!
+        diameter: Int!
+        orbitalPeriod: Int!
+        species: String!
+        dayLength: Float!
         moons: [Int]!
-        galaxy: Int
+        galaxy: Int!
     }
 
     input MoonInput{
-        name: String
-        distanceFromPlanet: Int
-        diameter: Int
-        orbitalPeriod: Float
+        name: String!
+        distanceFromPlanet: Int!
+        diameter: Int!
+        orbitalPeriod: Float!
         planet: Int!
     }
 
@@ -85,7 +85,7 @@ const typeDefs = `#graphql
         moon(id: Int): Moon
     }
 
-    type Mutations{
+    type Mutation{
         createGalaxy(galaxyInput: GalaxyInput): Galaxy
         updateGalaxy(id: Int, galaxyInput: GalaxyInput): Galaxy
         deleteGalaxy(id: Int): DeleteResponse
@@ -111,7 +111,7 @@ const resolvers = {
     },
 
     Mutation: {
-        createGalaxy: (_, { galaxyInput }) => {
+        createGalaxy: (_,  {galaxyInput} ) => {
             const id = data.galaxies[data.galaxies.length - 1].id + 1;
             const newGalaxy = { id, ...galaxyInput };
             data.galaxies.push(newGalaxy);
@@ -132,7 +132,7 @@ const resolvers = {
         createPlanet: (_, { planetInput }) => {
             const id = data.planet[data.planets.length - 1].id + 1;
             const newPlanet = { id, ...planetInput };
-            data.planets.push(planetInput);
+            data.planets.push(newPlanet);
             return newPlanet;
         },
         updatePlanet: (_, { id, planetInput }) => {
