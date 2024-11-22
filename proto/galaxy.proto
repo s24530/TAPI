@@ -9,19 +9,6 @@ service GalaxyService{
     rpc deleteGalaxy(GalaxyId) returns (Galaxy);
 }
 
-service PlanetService{
-    rpc GetPlanets(Empty) returns (Planet);
-    rpc GetPlanet(PlanetId) returns (Planet);
-    rpc updatePlanet(PlanetId) returns (Planet);
-    rpc deletePlanet(PlanetId) returns (Planet);
-}
-
-service MoonService{
-    rpc GetMoons(Empty) returns (Moon);
-    rpc GetMoon(MoonId) returns (Moon);
-    rpc updateMoon(MoonId) returns (Moon);
-    rpc deleteMoon(MoonId) returns (Moon);
-}
 
 message Empty{
 
@@ -36,39 +23,7 @@ message Galaxy{
     repeated int32 planets = 6;
 }
 
-message Planet{
-    int32 planet_id = 1;
-    string name = 2;
-    string climate = 3;
-    int32 diameter = 4;
-    int32 orbital_period = 5;
-    string species = 6;
-    float day_length = 7;
-    repeated int32 moons = 8;
-    int32 galaxy = 9;
-}
-
-message Moon{
-    int32 moon_id = 1;
-    string name = 2;
-    int32 distance_from_planet = 3;
-    int32 diameter = 4;
-    float orbital_period = 5;
-    int32 planet = 6;
-}
-
 
 message GalaxyId{
-    int32 id = 1;
-}
-
-
-
-message PlanetId{
-    int32 id = 1;
-}
-
-
-message MoonId{
     int32 id = 1;
 }

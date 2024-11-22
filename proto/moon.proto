@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package cosmos;
+
+service MoonService{
+    rpc GetMoons(Empty) returns (Moon);
+    rpc GetMoon(MoonId) returns (Moon);
+    rpc updateMoon(MoonId) returns (Moon);
+    rpc deleteMoon(MoonId) returns (Moon);
+}
+
+
+message Empty{
+
+}
+
+message Moon{
+    int32 moon_id = 1;
+    string name = 2;
+    int32 distance_from_planet = 3;
+    int32 diameter = 4;
+    float orbital_period = 5;
+    int32 planet = 6;
+}
+
+
+message MoonId{
+    int32 id = 1;
+}
