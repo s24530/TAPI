@@ -6,9 +6,11 @@ import { Kontrola, kontrola1, kontrola2 } from "./task1.js";
  * Stwórz typ `WszystkieKontrole` będący tablicą obiektów typu `Kontrola` lub typu `KontrolaZNotatkąOdSzefa`.
  */
 
-export type KontrolaZNotatkąOdSzefa = any;
+export type KontrolaZNotatkąOdSzefa  = {
+    notatkaOdSzefa: string
+} & Kontrola;
 
-export type WszystkieKontrole = any;
+export type WszystkieKontrole = (Kontrola|KontrolaZNotatkąOdSzefa)[];
 
 export const kontrolaZNotatką: KontrolaZNotatkąOdSzefa = {
     ...kontrola2,

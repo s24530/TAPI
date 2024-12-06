@@ -25,4 +25,4 @@ export const WynikKontroli = () => {
 
 //# ---
 
-export type TypKontroliZUrzędu = any;
+export type TypKontroliZUrzędu = Awaited<ReturnType<typeof WynikKontroli>>;

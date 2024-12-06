@@ -5,7 +5,9 @@
  * a wartością boolean określający czy kontrola została przeprowadzona.
  */
 
-export type KontroleZaRok = any;
+export type KontroleZaRok = {
+    [key: number]: boolean;
+};
 
 export const kontroleZaRok: KontroleZaRok = {
     2019: true,

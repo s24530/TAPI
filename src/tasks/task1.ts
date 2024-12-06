@@ -34,5 +34,13 @@ export const kontrola2: Kontrola = {
 
 //# ---
 
-export type Kontrola = any;
+export type Kontrola = {
+    id: number,
+    data: string,
+    godzina: string,
+    miejsce: string,
+    typ: string,
+    opis: string,
+    status: "ok" | "nok";
+};
 

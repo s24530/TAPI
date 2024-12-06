@@ -32,7 +32,7 @@ export const poprawWydatki: PoprawWydatki = (wydatek: any) => {
 
 //# ---
 
-export type PoprawWydatki = any;
+export type PoprawWydatki = <T extends Wydatek>(wydatek: T) => T;
 
 poprawWydatki(wydatek1);
 poprawWydatki(wydatek2);

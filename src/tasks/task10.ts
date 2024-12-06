@@ -33,7 +33,7 @@ export type JeszczeStarszaKontrola = {
 
 //# ---
 
-export type PartialKontrola<T> = any;
+export type PartialKontrola<T> =  Omit<Kontrola, keyof T> & Partial<Kontrola>;
 
 const kontrola1: PartialKontrola<StaraKontrola> = {
     godzina: "12:00",
