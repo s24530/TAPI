@@ -5,17 +5,17 @@ import {
     zwolnijPracownika,
 } from "./pracownicy.js";
 import { generujRaport } from "./raporty.js";
-import { Pracownik, Stanowisko, Waluta } from "./types/pracownikTypes.js";
+import { PaniBasia, Pracownik, Stanowisko, Waluta } from "./types/pracownikTypes.js";
 import { Priorytet } from "./types/raportTypes.js";
 
-export const listaPracowników: Pracownik[] = [];
+export const listaPracowników: (Omit<Pracownik,"id">|Pracownik)[] = [];
 
-const paniBasia = {
+const paniBasia: PaniBasia = {
     id: 0,
     imie: "Basia",
     nazwisko: "Kowalska",
     stanowisko: Stanowisko["pani basia"],
-    pensja: [500, 1] as [number, Waluta],
+    pensja: [500, 1] ,
     graNaSkrzypcach: "pięknie",
     bezNiejTenZakładUpadnie: true,
 };
@@ -25,11 +25,11 @@ const uruchomDzieńPracy = async () => {
         "Jan",
         "Kowalski",
         Stanowisko["podbutnik"],
-        /* ?? ---> */ [0, 1] as [number, Waluta]
+        [0, 1] 
     );
     dodajPracownikówZListy();
     dodajPracownika(paniBasia);
-    zwolnijPracownika(0, [1]);
+    zwolnijPracownika(0, 1);
 
     const efektyPracy = {
         obniżonaEfektywność: true,

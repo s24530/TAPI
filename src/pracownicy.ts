@@ -21,22 +21,21 @@ export const dodajNowegoPracownika = (
         stanowisko,
         pensja,
         zwolnij,
-    } as Pracownik);
+    });
 };
 export const dodajPracownika = (pracownik: Pracownik) => {
     listaPracowników.push(pracownik);
 };
 
-export const zwolnijPracownika = (id: number, powody: (string | number)[]) => {
+export const zwolnijPracownika = (id: number, ...powody: (string | number)[]) => {
     //odfiltrowac
-    const pracownik = listaPracowników.find(
-        (pracownik) => pracownik.id === id && pracownik.zwolnij != undefined
-    );
+    const pracownik = listaPracowników.filter(pracownik => "id" in pracownik).find(
+        (pracownik) => pracownik.id === id);
     if (!pracownik) {
         console.warn(`Nie znaleziono pracownika z ID ${id}.`);
         return;
     }
-    if (typeof pracownik.zwolnij === "function") {
+    if (typeof pracownik.zwolnij !== "undefined") {
         pracownik.zwolnij(powody);
     } else {
         console.error(`Pracownik z ID ${id} nie ma metody 'zwolnij'.`);

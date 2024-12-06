@@ -6,10 +6,10 @@ export type Pracownik = {
     pseudonim?: string;
     opis?: string;
     pensja: [number, Waluta];
-    zwolnij?: (args: (string | number)[]) => void;
+    zwolnij?: (...args: (string | number)[]) => void;
 };
 
-type PaniBasia = {
+export type PaniBasia = {
     graNaSkrzypcach: string;
     bezNiejTenZakładUpadnie: boolean;
 } & Pracownik;
