@@ -101,6 +101,48 @@ export const resolvers = {
             }
             return result;
         },
+        galaxy: (_, { id }) => {
+            const galaxy = data.galaxies.find((g) => g.id === id);
+            if (!galaxy) {
+                return {
+                    __typename: "ErrorResponse",
+                    message: "Galaxy not found",
+                    code: "404",
+                };
+            }
+            return {
+                __typename: "Galaxy",
+                ...galaxy,
+            };
+        },
+        planet: (_, { id }) => {
+            const planet = data.planets.find((g) => g.id === id);
+            if (!planet) {
+                return {
+                    __typename: "ErrorResponse",
+                    message: "Planet not found",
+                    code: "404",
+                };
+            }
+            return {
+                __typename: "Planet",
+                ...planet,
+            };
+        },
+        moon: (_, { id }) => {
+            const moon = data.moons.find((g) => g.id === id);
+            if (!moon) {
+                return {
+                    __typename: "ErrorResponse",
+                    message: "Moon not found",
+                    code: "404",
+                };
+            }
+            return {
+                __typename: "Moon",
+                ...moon,
+            };
+        },
     },
     Mutation: {
         createGalaxy: (_, { galaxyInput }) => {
@@ -119,6 +161,48 @@ export const resolvers = {
             if (galaxyIndex === -1)
                 return { success: false, message: "Not Found", code: "404" };
             data.galaxies.splice(galaxyIndex, 1);
+            return { success: true, message: "Deleted", code: "204" };
+        },
+        createPlanet: (_, { planetInput }) => {
+            const id = data.planet[data.planets.length - 1].id + 1;
+            const newPlanet = { id, ...planetInput };
+            data.planets.push(newPlanet);
+            return newPlanet;
+        },
+        updatePlanet: (_, { id, planetInput }) => {
+            const planetIndex = data.planets.findIndex((m) => m.id === id);
+            data.planets[planetIndex] = {
+                id: id,
+                ...planetInput,
+            };
+            return { id: id, ...planetInput };
+        },
+        deletePlanet: (_, { id }) => {
+            const planetIndex = data.planets.findIndex((m) => m.id === id);
+            if (planetIndex === -1)
+                return { success: false, message: "Not Found", code: "404" };
+            data.planets.splice(moonIndex, 1);
+            return { success: true, message: "Deleted", code: "204" };
+        },
+        createMoon: (_, { moonInput }) => {
+            const id = data.moons[data.moons.length - 1].id + 1;
+            const newMoon = { id, ...moonInput };
+            data.moons.push(newMoon);
+            return newMoon;
+        },
+        updateMoon: (_, { id, moonInput }) => {
+            const moonIndex = data.moons.findIndex((m) => m.id === id);
+            data.moons[moonIndex] = {
+                id: id,
+                ...moonInput,
+            };
+            return { id: id, ...moonInput };
+        },
+        deleteMoon: (_, { id }) => {
+            const moonIndex = data.moons.findIndex((m) => m.id === id);
+            if (moonIndex === -1)
+                return { success: false, message: "Not Found", code: "404" };
+            data.moons.splice(moonIndex, 1);
             return { success: true, message: "Deleted", code: "204" };
         },
     },
