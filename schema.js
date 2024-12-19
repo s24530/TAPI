@@ -1,5 +1,7 @@
 export const typeDefs = `#graphql
 
+    scalar Email
+
     type Galaxy{
         id: Int!
         name: String
@@ -7,6 +9,7 @@ export const typeDefs = `#graphql
         size: Int
         mainStar: String
         planets: [Int]!
+        createdBy: Email
     }
 
     type Planet{
@@ -19,6 +22,7 @@ export const typeDefs = `#graphql
         dayLength: Float
         moons: [Int]!
         galaxy: Int
+        createdBy: Email
     }
 
     type Moon{
@@ -28,6 +32,7 @@ export const typeDefs = `#graphql
         diameter: Int
         orbitalPeriod: Float
         planet: Int!
+        createdBy: Email
     }
 
     input GalaxyInput{
