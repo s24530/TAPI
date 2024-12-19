@@ -1,11 +1,46 @@
-import * as grpc from "@grpc/grpc-js"
-import * as protoLoader from "@grpc/proto-loader"
+import * as grpc from "@grpc/grpc-js";
+import * as protoLoader from "@grpc/proto-loader";
 
-const packageDefinition = protoLoader.loadSync('./proto/galaxy.proto');
-const proto = grpc.loadPackageDefinition(packageDefinition);
+const galaxyPackageDefinition = protoLoader.loadSync("./proto/galaxy.proto");
+const planetPackageDefinition = protoLoader.loadSync("./proto/planet.proto");
+const moonPackageDefinition = protoLoader.loadSync("./proto/moon.proto");
+const galaxyProto = grpc.loadPackageDefinition(galaxyPackageDefinition);
+const planetProto = grpc.loadPackageDefinition(planetPackageDefinition);
+const moonProto = grpc.loadPackageDefinition(moonPackageDefinition);
 
-const client = new proto.cosmos.GalaxyService("127.0.0.1:4000", grpc.ChannelCredentials.createInsecure(), (err) => console.log(err));
+const clientGalaxy = new galaxyProto.cosmos.GalaxyService(
+    "127.0.0.1:4000",
+    grpc.ChannelCredentials.createInsecure(),
+    (err) => console.log(err)
+);
 
-client.GetGalaxy(null, (err, res) =>{
+const clientMoon = new moonProto.cosmos.MoonService(
+    "127.0.0.1:4000",
+    grpc.ChannelCredentials.createInsecure(),
+    (err) => console.log(err)
+);
+
+const clientPlanet = new planetProto.cosmos.PlanetService(
+    "127.0.0.1:4000",
+    grpc.ChannelCredentials.createInsecure(),
+    (err) => console.log(err)
+);
+
+clientPlanet.GetPlanets(
+    {
+        filter: { field: "climate", operation: "EQUAL", value: "arid" },
+        sort: { field: "name", order: "ASC" },
+        page: { limit: 2, offset: 0 },
+    },
+    (err, res) => {
+        console.log(res);
+    }
+);
+
+clientPlanet.GetPlanet({ id: 1 }, (err, res) => {
     console.log(res);
-})
+});
+
+clientPlanet.DeletePlanet({ id: 1 }, (err, res) => {
+    console.log(res);
+});

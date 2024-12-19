@@ -2,17 +2,15 @@ syntax = "proto3";
 
 package cosmos;
 
+import "./helpers.proto";
+
 service GalaxyService{
-    rpc GetGalaxies(Empty) returns (Galaxy);
+    rpc GetGalaxies(Logic) returns (GalaxiesList);
     rpc GetGalaxy(GalaxyId) returns (Galaxy);
     rpc updateGalaxy(GalaxyId) returns (Galaxy);
     rpc deleteGalaxy(GalaxyId) returns (Galaxy);
 }
 
-
-message Empty{
-
-}
 
 message Galaxy{
     int32 galaxy_id = 1;
@@ -26,4 +24,9 @@ message Galaxy{
 
 message GalaxyId{
     int32 id = 1;
+}
+
+
+message GalaxiesList{
+    repeated Galaxy galaxies = 1;
 }

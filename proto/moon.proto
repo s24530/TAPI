@@ -2,16 +2,13 @@ syntax = "proto3";
 
 package cosmos;
 
+import "./helpers.proto";
+
 service MoonService{
-    rpc GetMoons(Empty) returns (Moon);
+    rpc GetMoons(Logic) returns (MoonsList);
     rpc GetMoon(MoonId) returns (Moon);
     rpc updateMoon(MoonId) returns (Moon);
     rpc deleteMoon(MoonId) returns (Moon);
-}
-
-
-message Empty{
-
 }
 
 message Moon{
@@ -26,4 +23,8 @@ message Moon{
 
 message MoonId{
     int32 id = 1;
+}
+
+message MoonsList{
+    repeated Moon moons = 1;
 }

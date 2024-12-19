@@ -2,19 +2,16 @@ syntax = "proto3";
 
 package cosmos;
 
-import "proto/galaxy.proto";
+import "./helpers.proto";
 
 service PlanetService{
-    rpc GetPlanets(Empty) returns (Planet);
+    rpc GetPlanets(Logic) returns (PlanetList);
     rpc GetPlanet(PlanetId) returns (Planet);
     rpc updatePlanet(PlanetId) returns (Planet);
     rpc deletePlanet(PlanetId) returns (Planet);
 }
 
 
-message Empty{
-
-}
 
 message Planet{
     int32 planet_id = 1;
@@ -30,4 +27,8 @@ message Planet{
 
 message PlanetId{
     int32 id = 1;
+}
+
+message PlanetList {
+    repeated Planet planets = 1;
 }
