@@ -26,21 +26,59 @@ const clientPlanet = new planetProto.cosmos.PlanetService(
     (err) => console.log(err)
 );
 
-clientPlanet.GetPlanets(
-    {
-        filter: { field: "climate", operation: "EQUAL", value: "arid" },
-        sort: { field: "name", order: "ASC" },
-        page: { limit: 2, offset: 0 },
-    },
-    (err, res) => {
-        console.log(res);
-    }
-);
+// const newPlanet = {
+//     name: "Tatooine",
+//     climate: "arid",
+//     diameter: 10465,
+//     orbital_period: 304,
+//     species: "Hutt",
+//     day_length: 23,
+//     moons: [1, 2],
+//     galaxy: "Milky Way",
+// };
 
-clientPlanet.GetPlanet({ id: 1 }, (err, res) => {
-    console.log(res);
-});
+// clientPlanet.CreatePlanet(newPlanet, (err, res) => {
+//     if (err) {
+//         console.error("Error creating planet:", err);
+//     } else {
+//         console.log("Created planet:", res);
+//     }
+// });
 
-clientPlanet.DeletePlanet({ id: 1 }, (err, res) => {
-    console.log(res);
-});
+// clientPlanet.GetPlanets(
+//     {
+//         filter: { field: "climate", operation: "EQUAL", value: "temperate" },
+//         sort: { field: "name", order: "ASC" },
+//         page: { limit: 100, offset: 0 },
+//     },
+//     (err, res) => {
+//         console.log(res);
+//     }
+// );
+
+// clientPlanet.GetPlanet({ id: 1 }, (err, res) => {
+//     console.log(res);
+// });
+
+// const updatedPlanet = {
+//     name: "Tatooine",
+//     climate: "arid",
+//     diameter: 10465,
+//     orbital_period: 304,
+//     species: "Hutt",
+//     day_length: 23,
+//     moons: [1, 2],
+//     galaxy: "Milky Way",
+// };
+
+// clientPlanet.UpdatePlanet({ id: 1, planet: updatedPlanet }, (err, res) => {
+//     if (err) {
+//         console.error("Error updating planet:", err);
+//     } else {
+//         console.log("Updated planet:", res);
+//     }
+// });
+
+// clientPlanet.DeletePlanet({ id: 1 }, (err, res) => {
+//     console.log(res);
+// });

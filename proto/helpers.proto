@@ -27,3 +27,9 @@ message Logic{
   Sort sort = 2;
   Page page = 3;
 }
+
+message DeleteResponse{
+  bool success = 1;
+  string message = 2;
+  string code = 3;
+}

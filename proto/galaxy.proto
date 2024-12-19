@@ -5,10 +5,11 @@ package cosmos;
 import "./helpers.proto";
 
 service GalaxyService{
+    rpc CreateGalaxy(Galaxy) returns (Galaxy);
     rpc GetGalaxies(Logic) returns (GalaxiesList);
     rpc GetGalaxy(GalaxyId) returns (Galaxy);
-    rpc updateGalaxy(GalaxyId) returns (Galaxy);
-    rpc deleteGalaxy(GalaxyId) returns (Galaxy);
+    rpc UpdateGalaxy(GalaxyUpdate) returns (Galaxy);
+    rpc DeleteGalaxy(GalaxyId) returns (DeleteResponse);
 }
 
 
@@ -19,6 +20,11 @@ message Galaxy{
     int32 size = 4;
     string star_name = 5;
     repeated int32 planets = 6;
+}
+
+message GalaxyUpdate{
+    int32 id = 1;
+    Galaxy galaxy = 2;
 }
 
 

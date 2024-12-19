@@ -16,6 +16,14 @@ const mapPlanet = (planet) => {
 };
 
 export const planetResolvers = {
+    CreatePlanet: (req, res) => {
+        const id = data.planets[data.planets.length - 1].id + 1;
+        const newPlanet = { id, ...req.request };
+        data.planets.push(newPlanet);
+        console.log(newPlanet);
+        const planet = mapPlanet(newPlanet);
+        res(null, planet);
+    },
     GetPlanets: (req, res) => {
         const { filter, sort, page } = req.request || {};
         let result = data.planets;
@@ -49,27 +57,25 @@ export const planetResolvers = {
         res(null, result);
     },
 
-    updatePlanet: (req, res) => {
-        const planetID = req.request.id;
-        res(null, {
-            galaxy_id: planetID,
-            name: `Updated Galaxy ${galaxyId}`,
-            star_name: `Updated Star ${galaxyId}`,
-            distance: 2000,
-            size: 700,
-            planets: [7, 8, 9],
-        });
+    UpdatePlanet: (req, res) => {
+        const planetIndex = data.planets.findIndex(
+            (m) => m.id === req.request.id
+        );
+        const id = req.request.id;
+        data.planets[planetIndex] = { id, ...req.request.planet };
+        const planet = mapPlanet({ id, ...req.request.planet });
+        res(null, planet);
     },
 
-    deletePlanet: (req, res) => {
-        const planetID = req.request.id;
-        res(null, {
-            galaxy_id: planetID,
-            name: "",
-            star_name: "",
-            distance: 0,
-            size: 0,
-            planets: [],
-        });
+    DeletePlanet: (req, res) => {
+        const planetIndex = data.planets.findIndex(
+            (m) => m.id === req.request.id
+        );
+        if (planetIndex === -1) {
+            res(null, { success: false, message: "Not Found", code: "404" });
+        } else {
+            data.planets.splice(planetIndex, 1);
+            res(null, { success: true, message: "Deleted", code: "204" });
+        }
     },
 };

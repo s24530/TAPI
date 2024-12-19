@@ -5,10 +5,11 @@ package cosmos;
 import "./helpers.proto";
 
 service PlanetService{
+    rpc CreatePlanet(PlanetCreate) returns (Planet);
     rpc GetPlanets(Logic) returns (PlanetList);
     rpc GetPlanet(PlanetId) returns (Planet);
-    rpc updatePlanet(PlanetId) returns (Planet);
-    rpc deletePlanet(PlanetId) returns (Planet);
+    rpc UpdatePlanet(PlanetUpdate) returns (Planet);
+    rpc DeletePlanet(PlanetId) returns (DeleteResponse);
 }
 
 
@@ -23,6 +24,21 @@ message Planet{
     float day_length = 7;
     repeated int32 moons = 8;
     int32 galaxy = 9;
+}
+message PlanetCreate{
+    string name = 2;
+    string climate = 3;
+    int32 diameter = 4;
+    int32 orbital_period = 5;
+    string species = 6;
+    float day_length = 7;
+    repeated int32 moons = 8;
+    int32 galaxy = 9;
+}
+
+message PlanetUpdate{
+    int32 id = 1;
+    Planet planet = 2;
 }
 
 message PlanetId{

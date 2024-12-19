@@ -5,10 +5,11 @@ package cosmos;
 import "./helpers.proto";
 
 service MoonService{
+    rpc CreateMoon(Moon) returns (Moon);
     rpc GetMoons(Logic) returns (MoonsList);
     rpc GetMoon(MoonId) returns (Moon);
-    rpc updateMoon(MoonId) returns (Moon);
-    rpc deleteMoon(MoonId) returns (Moon);
+    rpc UpdateMoon(MoonUpdate) returns (Moon);
+    rpc DeleteMoon(MoonId) returns (DeleteResponse);
 }
 
 message Moon{
@@ -20,6 +21,10 @@ message Moon{
     int32 planet = 6;
 }
 
+message MoonUpdate{
+    int32 id = 1;
+    Moon moon = 2;
+}
 
 message MoonId{
     int32 id = 1;
