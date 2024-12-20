@@ -123,6 +123,6 @@ moonRouter.delete("/:id", (req, res) => {
         return res.status(404).send("Moon not found");
     }
 
-    data.planets.splice(index, 1);
+    data.moons.splice(index, 1);
     res.status(204).send("Moon deleted");
 });
