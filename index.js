@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { absolutePath } from "swagger-ui-dist";
 import { galaxyRouter } from "./routes/galaxyRouter.js";
 import { planetRouter } from "./routes/planetRouter.js";
 import { moonRouter } from "./routes/moonRouter.js";
@@ -45,6 +46,7 @@ const middlewareContentTypeOptions = (req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.static(absolutePath()))
 
 app.use(middlewareAuthorization);
 app.use(middlewareContentType);
