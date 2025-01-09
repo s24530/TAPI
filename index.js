@@ -1,11 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { absolutePath } from "swagger-ui-dist";
+import swaggerjsdoc from "swagger-jsdoc";
+import swaggerui from "swagger-ui-express";
 import { galaxyRouter } from "./routes/galaxyRouter.js";
 import { planetRouter } from "./routes/planetRouter.js";
 import { moonRouter } from "./routes/moonRouter.js";
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 const port = 4000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const allowedOrigins = ["http://localhost:4000"];
 
@@ -46,23 +52,56 @@ const middlewareContentTypeOptions = (req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static(absolutePath()))
-
-app.use(middlewareAuthorization);
-app.use(middlewareContentType);
 app.use(middlewareContentTypeOptions);
 
-app.use("/galaxies", galaxyRouter);
-app.use("/planets", planetRouter);
-app.use("/moons", moonRouter);
+app.use("/docus", express.static(path.join(__dirname, "build")));
+
+app.use(
+    "/galaxies",
+    middlewareAuthorization,
+    middlewareContentType,
+    galaxyRouter
+);
+app.use(
+    "/planets",
+    middlewareAuthorization,
+    middlewareContentType,
+    planetRouter
+);
+app.use("/moons", middlewareAuthorization, middlewareContentType, moonRouter);
 
 app.get("/", (req, res) => {
     res.json({
         galaxies: "localhost:4000/galaxies",
         planets: "localhost:4000/planets",
-        moons: "localhost:4000/moons]",
+        moons: "localhost:4000/moons",
     });
 });
+
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Space API Documentation",
+            version: "1.0.0",
+            description: "API documentation for the space exploration service",
+            contact: {
+                name: "Jacob",
+                url: "jacob.com",
+                email: "jacob@gmail.com",
+            }, //random information
+        },
+        servers: [
+            {
+                url: "http://localhost:4000",
+            },
+        ],
+    },
+    apis: ["./routes/*.js"],
+};
+
+const specs = swaggerjsdoc(options);
+app.use("/api-docs", swaggerui.serve, swaggerui.setup(specs));
 
 app.listen(port, () => {
     console.log("Server started on localhost:", port);

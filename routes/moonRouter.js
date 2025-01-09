@@ -1,3 +1,49 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Moon:
+ *       type: object
+ *       required:
+ *         - name
+ *         - distanceFromPlanet
+ *         - diameter
+ *         - orbitalPeriod
+ *         - planet
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the moon
+ *         name:
+ *           type: string
+ *           description: The name of the moon
+ *         distanceFromPlanet:
+ *           type: number
+ *           description: The distance of the moon from its planet in kilometers
+ *         diameter:
+ *           type: number
+ *           description: The diameter of the moon in kilometers
+ *         orbitalPeriod:
+ *           type: number
+ *           description: The orbital period of the moon in days
+ *         planet:
+ *           type: integer
+ *           description: The id of the planet the moon orbits
+ *       example:
+ *         id: 1
+ *         name: Europa
+ *         distanceFromPlanet: 670900
+ *         diameter: 3121.6
+ *         orbitalPeriod: 3.551
+ *         planet: 5
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Moons
+ *   description: The moons managing router
+ */
 import express from "express";
 import data from "./data.json" assert { type: "json" };
 export const moonRouter = express.Router();
@@ -41,11 +87,50 @@ const addHateoas = (item) => {
     };
 };
 
+/**
+ * @swagger
+ * /moons:
+ *   get:
+ *     summary: Returns the list of all the moons
+ *     tags: [Moons]
+ *     responses:
+ *       200:
+ *         description: The list of moons
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Moon'
+ */
 moonRouter.get("/", (req, res) => {
     const moons = data.moons.map(addHateoas);
     res.send(moons);
 });
 
+/**
+ * @swagger
+ * /moons/{id}:
+ *   get:
+ *     summary: Get a moon by ID
+ *     tags: [Moons]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The moon id
+ *     responses:
+ *       200:
+ *         description: The moon description by id
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Moon'
+ *       404:
+ *         description: The moon was not found
+ */
 moonRouter.get("/:id", (req, res) => {
     const moon = data.moons.find((g) => g.id === parseInt(req.params.id));
     if (moon) {
@@ -55,6 +140,28 @@ moonRouter.get("/:id", (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /moons:
+ *   post:
+ *     summary: Create a new moon
+ *     tags: [Moons]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Moon'
+ *     responses:
+ *       201:
+ *         description: The moon was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Moon'
+ *       400:
+ *         description: Invalid data provided
+ */
 moonRouter.post("/", (req, res) => {
     if (!Object.keys(req.body).length) {
         return res.status(400).send("No data provided");
@@ -67,6 +174,37 @@ moonRouter.post("/", (req, res) => {
     res.status(201).send(addHateoas(newMoon));
 });
 
+/**
+ * @swagger
+ * /moons/{id}:
+ *   put:
+ *     summary: Update a moon by the id
+ *     tags: [Moons]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The moon id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Moon'
+ *     responses:
+ *       201:
+ *         description: The moon was successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Moon'
+ *       404:
+ *         description: The moon was not found
+ *       400:
+ *         description: Invalid data provided
+ */
 moonRouter.put("/:id", (req, res) => {
     if (!Object.keys(req.body).length) {
         return res.status(400).send("No data provided");
@@ -85,6 +223,37 @@ moonRouter.put("/:id", (req, res) => {
     res.status(201).json(addHateoas(data.moons[moonIndex]));
 });
 
+/**
+ * @swagger
+ * /moons/{id}:
+ *   patch:
+ *     summary: Partially update a moon by id
+ *     tags: [Moons]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The moon id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Moon'
+ *     responses:
+ *       200:
+ *         description: The moon was successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Moon'
+ *       404:
+ *         description: The moon was not found
+ *       400:
+ *         description: Invalid data provided
+ */
 // ... <- spread operator
 moonRouter.patch("/:id", (req, res) => {
     if (!Object.keys(req.body).length) {
@@ -117,6 +286,25 @@ moonRouter.patch("/:id", (req, res) => {
     res.json(addHateoas(data.moons[moonIndex]));
 });
 
+/**
+ * @swagger
+ * /moons/{id}:
+ *   delete:
+ *     summary: Remove a moon by id
+ *     tags: [Moons]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The moon id
+ *     responses:
+ *       204:
+ *         description: The moon was deleted
+ *       404:
+ *         description: The moon was not found
+ */
 moonRouter.delete("/:id", (req, res) => {
     const index = data.moons.findIndex((g) => g.id === parseInt(req.params.id));
     if (index === -1) {
